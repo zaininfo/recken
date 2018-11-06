@@ -1,0 +1,66 @@
+log:
+  file:
+    level: silly
+    colorize: false
+    timestamp: true
+    filename: logs/recken-error.log
+    maxsize: 10485760
+    maxFiles: 10
+    json: true
+    prettyPrint: true
+invertedIndex:
+  filename: data/inverted-index.json
+streamSummary:
+  buckets: 10000
+cli:
+  commands:
+    - name: help
+    - name: index
+      options:
+        - &SOURCE_FILE
+          name: source-file
+          alias: f
+          multiple: false
+          defaultOption: true
+    - name: topk
+      options:
+        - &SKU_CODE
+          name: sku-code
+          alias: s
+          multiple: false
+          defaultOption: true
+        - <<: *SOURCE_FILE
+          defaultOption: false
+        - &NUMBER_OF_ITEMS
+          name: number-of-items
+          alias: k
+          multiple: false
+          defaultValue: 10
+  usage:
+    - header: RECkEN
+      content: A proof of concept recommendation engine that produces a list of top-k similar items (given an item) on demand.
+    - header: Synopsis
+      content: $ recken <command> <options>
+    - header: Command List
+      content:
+        - name: help
+          summary: Display this usage guide.
+        - name: index
+          summary: Generate an inverted index of attributes to items.
+        - name: topk
+          summary: Produce a list of top similar items for a given item.
+    - header: 'Options: index'
+      optionList:
+        - &SOURCE_FILE_USAGE
+          <<: *SOURCE_FILE
+          typeLabel: '[underline]{file}'
+          description: The absolute path of a file containing the list of all items.
+    - header: 'Options: topk'
+      optionList:
+        - <<: *SKU_CODE
+          typeLabel: '[underline]{string}'
+          description: An SKU code of the item for which similar items are required.
+        - <<: *SOURCE_FILE_USAGE
+        - <<: *NUMBER_OF_ITEMS
+          typeLabel: '[underline]{number}'
+          description: The number of most similar items to return (defaults to 10).

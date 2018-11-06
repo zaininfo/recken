@@ -1,0 +1,6 @@
+node_modules
+npm-debug.log
+.DS_Store
+config/local*
+config/local.yml
+yarn-error.log
